@@ -17,4 +17,8 @@ public class Entree {
     public void setAction(String action) {
         this.action = action;
     }
+
+    public String toString(){
+        return this.action;
+    }
 }

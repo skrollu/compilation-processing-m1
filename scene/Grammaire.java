@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Grammaire{
@@ -37,5 +38,11 @@ public class Grammaire{
         this.regle = regle;
     }
 
-
+    public String toString(){
+        ArrayList<Entree> liste = new ArrayList<Entree>();
+        for (int i = this.regle.size() - 1; i >= 0; i--) {
+            liste.add(this.regle.get(i));
+        }
+        return "(" + this.number + ") " + this.variable.getAction() + " => " + liste;
+    }
 }

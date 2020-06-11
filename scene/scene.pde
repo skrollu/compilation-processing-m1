@@ -22,7 +22,7 @@ void setup(){
 
   endOfFile = false;
 
-  rows = loadStrings("entrees.txt");
+  rows = loadStrings("entrees.dat");
 
   if(rows.length > 0) {
     indiceRow = 0;
@@ -42,6 +42,7 @@ void setup(){
 void draw(){
   background(255);
 
+  dessineGrammaire();
   dessineEntreeSortie();
   dessinePile(pile);
   
@@ -57,6 +58,13 @@ void chargerEntrees(int indice){
   for(int i = str.length -1; i >= 0; i--){
     entreeCourante.add(str[i]);
   } 
+}
+
+void dessineGrammaire(){
+  fill(0);
+  for(int i = 0; i < grammaires.length; i++){
+    text(grammaires[i].toString(), 3*(width/5), height/3 + (i*cote/2));
+  }
 }
 
 void dessineEntreeSortie(){
@@ -111,10 +119,11 @@ void majPileSortieTerminal(){
 void mousePressed(){
   boolean grammaireTrouvee = false;
 
-  if(!sortie.isEmpty() && sortie.get(sortie.size()-1).equals("ERROR")){  // Le haut de la pile est une erreur
+  if(!sortie.isEmpty() && sortie.get(sortie.size()-1).equals("ERROR")){  //On a print une ERROR en sortie sur l'action d'avant donc on a une erreur de compilation pour ce mot
+    
     initWord();
-  } else if( pile.get(pile.size()-1) != null && pile.get(pile.size()-1) instanceof Variable){
-    println("Variable");
+  } else if(!pile.isEmpty() && pile.get(pile.size()-1) != null && pile.get(pile.size()-1) instanceof Variable){
+    //println("Variable");
     for (int i = 0; i < grammaires.length; i++){
       
       //Si haut de pile == variable d'une grammaire disponible et si haut de regle de la variable est le même terminal que celui de l'entrée.
@@ -127,7 +136,7 @@ void mousePressed(){
          if(entreeCourante.get(entreeCourante.size()-1).length() == 1){
               if(isDigit(entreeCourante.get(entreeCourante.size()-1).charAt(0))) { // si l'entrée est un nombre
               
-              println("Variable l'entrée est un nombre");
+            //  println("Variable l'entrée est un nombre");
                 grammaireTrouvee = true;    
                 majPileSortieVariable(grammaireTrouvee, grammaires[i]);
               }
@@ -138,7 +147,7 @@ void mousePressed(){
           if(entreeCourante.get(entreeCourante.size()-1).length() == 1){
             if (isLetter(entreeCourante.get(entreeCourante.size()-1).charAt(0))){ //si l'entrée est un id
               
-              println("Variable l'entrée est une lettre");
+              //println("Variable l'entrée est une lettre");
                 grammaireTrouvee = true;
                 majPileSortieVariable(grammaireTrouvee, grammaires[i]);
              }
@@ -148,7 +157,7 @@ void mousePressed(){
     }
 
     if(!grammaireTrouvee){
-      println("eps");
+      //println("eps");
       for (int i = 0; i < grammaires.length; i++){
         //Si haut de pile == variable d'une grammaire disponible && si haut de règle est EPS
         if(grammaires[i].getVariable().getAction().equals(pile.get(pile.size()-1).getAction()) 
@@ -160,7 +169,7 @@ void mousePressed(){
     }
     
       if(!grammaireTrouvee){
-        println("haut de regle != mot");
+       //println("haut de regle != mot");
       for (int i = 0; i < grammaires.length; i++){
         //Si haut de pile == variable d'une grammaire disponible && si haut de règle est EPS
         if(grammaires[i].getVariable().getAction().equals(pile.get(pile.size()-1).getAction()) && !grammaireTrouvee){
@@ -175,9 +184,9 @@ void mousePressed(){
       println("ERROR GRAMMAIRE NOT FOUND");
     }
        
-  } else if(pile.get(pile.size()-1) != null && pile.get(pile.size()-1) instanceof Terminal){
+  } else if(!pile.isEmpty() && pile.get(pile.size()-1) != null && pile.get(pile.size()-1) instanceof Terminal){
   
-    println("terminal");
+    //println("terminal");
     
     if(!pile.get(pile.size()-1).getAction().equals("$")){
         //haut de pile == mot de l'entrée !
@@ -191,10 +200,10 @@ void mousePressed(){
          if(entreeCourante.get(entreeCourante.size()-1).length() == 1){
   
           if(isDigit(entreeCourante.get(entreeCourante.size()-1).charAt(0))) { // si l'entrée est un nombre
-            println("Terminal l'entrée est nombre");
+            //println("Terminal l'entrée est nombre");
             majPileSortieTerminal();
           } else if (isLetter(entreeCourante.get(entreeCourante.size()-1).charAt(0))){ //si l'entrée est un id
-            println("Terminal l'entrée est une lettre");
+            //println("Terminal l'entrée est une lettre");
             majPileSortieTerminal();
           }
         }
@@ -202,7 +211,7 @@ void mousePressed(){
         println("terminal en entrée et terminal en haut de pile ne match pas => Error");
         sortie.add("ERROR");
       }
-    } else { // on a finit avec ce mot on passe au suivant
+    } else { // on a un dollar donc on a finit avec ce mot on passe au suivant
     
       initWord();
     }
@@ -212,6 +221,7 @@ void mousePressed(){
 void initWord(){
   pile.clear();
   sortie.clear();
+  entreeCourante.clear();
     if(indiceRow < rows.length - 1){
     indiceRow++;
     chargerEntrees(indiceRow);

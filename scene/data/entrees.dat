@@ -1,4 +1,5 @@
 )
+début a + b := 3 fin
 début ; fin
 début ( fin
 début a := 3 ; b := a ; fin
