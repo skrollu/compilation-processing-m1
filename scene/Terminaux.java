@@ -10,7 +10,7 @@ enum Terminaux {
     PAR_OUVRANTE("("),
     PAR_FERMANTE(")"), 
     NOMBRE("nb"),
-    EPSILON("eps"),
+    EPSILON("EPS"),
     DOLLAR("$");
 
       // declaring private variable for getting values 

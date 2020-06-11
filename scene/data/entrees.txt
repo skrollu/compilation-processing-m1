@@ -1,1 +1,4 @@
+)
+début ; fin
+début ( fin
 début a := 3 ; b := a ; fin

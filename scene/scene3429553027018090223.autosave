@@ -47,7 +47,6 @@ void draw(){
   
   if(endOfFile){
     dessineEndOfFile();
-  }
 }
 
 void chargerEntrees(int indice){
@@ -56,7 +55,7 @@ void chargerEntrees(int indice){
   
   for(int i = str.length -1; i >= 0; i--){
     entreeCourante.add(str[i]);
-  } 
+  }
 }
 
 void dessineEntreeSortie(){
@@ -111,9 +110,8 @@ void majPileSortieTerminal(){
 void mousePressed(){
   boolean grammaireTrouvee = false;
 
-  if(!sortie.isEmpty() && sortie.get(sortie.size()-1).equals("ERROR")){  // Le haut de la pile est une erreur
-    initWord();
-  } else if( pile.get(pile.size()-1) != null && pile.get(pile.size()-1) instanceof Variable){
+
+  if( pile.get(pile.size()-1) != null && pile.get(pile.size()-1) instanceof Variable){
     println("Variable");
     for (int i = 0; i < grammaires.length; i++){
       
@@ -198,27 +196,17 @@ void mousePressed(){
             majPileSortieTerminal();
           }
         }
-      } else { // il n'y a pas match entre deux terminaux => erreur
-        println("terminal en entrée et terminal en haut de pile ne match pas => Error");
-        sortie.add("ERROR");
       }
     } else { // on a finit avec ce mot on passe au suivant
     
-      initWord();
+      
+      if(indiceRow < rows.length - 1){
+        indiceRow++;
+        chargerEntrees(indiceRow);
+      } else {  
+        endOfFile = true;
+      }
     }
-  }
-}
-
-void initWord(){
-  pile.clear();
-  sortie.clear();
-    if(indiceRow < rows.length - 1){
-    indiceRow++;
-    chargerEntrees(indiceRow);
-    pile.add(table.getDollar());
-    pile.add(table.getP());
-  } else {  
-    endOfFile = true;
   }
 }
 
