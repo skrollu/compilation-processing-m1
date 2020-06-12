@@ -42,12 +42,12 @@ void setup(){
 void draw(){
   background(255);
 
-  dessineGrammaire();
-  dessineEntreeSortie();
-  dessinePile(pile);
-  
   if(endOfFile){
     dessineEndOfFile();
+  } else {
+    dessineGrammaire();
+    dessineEntreeSortie();
+    dessinePile(pile);
   }
 }
 
@@ -99,7 +99,7 @@ void majPileSortieVariable(boolean found, Grammaire gram){
       final List<Entree> regle = gram.getRegle();
       pile.remove(pile.size()-1);
       for(int j = 0; j < regle.size(); j++){
-        if(!regle.get(j).getAction().equals("EPS")){
+        if(!regle.get(j).getAction().equals("eps")){
           pile.add(regle.get(j));
         }
       }
@@ -119,9 +119,13 @@ void majPileSortieTerminal(){
 void mousePressed(){
   boolean grammaireTrouvee = false;
 
-  if(!sortie.isEmpty() && sortie.get(sortie.size()-1).equals("ERROR")){  //On a print une ERROR en sortie sur l'action d'avant donc on a une erreur de compilation pour ce mot
+  if(!sortie.isEmpty() && sortie.get(sortie.size()-1).equals("ERROR")){ 
+    //On a une ERROR en sortie sur l'action d'avant donc on a une erreur de compilation pour ce mot
     
     initWord();
+  } else if (entreeCourante.isEmpty()){ // notre pile n'est pas vide mais l'entrée l'est
+    println("ERROR, l'entrée courante est vide mais pas la pile.");
+    sortie.add("ERROR");
   } else if(!pile.isEmpty() && pile.get(pile.size()-1) != null && pile.get(pile.size()-1) instanceof Variable){
     //println("Variable");
     for (int i = 0; i < grammaires.length; i++){
@@ -161,7 +165,7 @@ void mousePressed(){
       for (int i = 0; i < grammaires.length; i++){
         //Si haut de pile == variable d'une grammaire disponible && si haut de règle est EPS
         if(grammaires[i].getVariable().getAction().equals(pile.get(pile.size()-1).getAction()) 
-        && grammaires[i].getRegle().get(grammaires[i].getRegle().size()-1).getAction().equals("EPS") && !grammaireTrouvee){
+        && grammaires[i].getRegle().get(grammaires[i].getRegle().size()-1).getAction().equals("eps") && !grammaireTrouvee){
           grammaireTrouvee = true;
           majPileSortieVariable(grammaireTrouvee, grammaires[i]);
         }
@@ -171,7 +175,7 @@ void mousePressed(){
       if(!grammaireTrouvee){
        //println("haut de regle != mot");
       for (int i = 0; i < grammaires.length; i++){
-        //Si haut de pile == variable d'une grammaire disponible && si haut de règle est EPS
+        //Si haut de pile == variable d'une grammaire disponible 
         if(grammaires[i].getVariable().getAction().equals(pile.get(pile.size()-1).getAction()) && !grammaireTrouvee){
           grammaireTrouvee = true;
           majPileSortieVariable(grammaireTrouvee, grammaires[i]);

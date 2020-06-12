@@ -1,5 +1,10 @@
+début id :=
+début fin
+début ; fin
 )
 début a + b := 3 fin
-début ; fin
+(
+; :=
+) + := 2
 début ( fin
 début a := 3 ; b := a ; fin
